@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UserRepository } from './user.repository';
@@ -7,10 +7,17 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) { }
   async create(createUserInput: CreateUserInput) {
-    return this.userRepository.create({
-      ...createUserInput,
-      password: await bcrypt.hash(createUserInput.password, 10)
-    });
+    try {
+      return await this.userRepository.create({
+        ...createUserInput,
+        password: await bcrypt.hash(createUserInput.password, 10)
+      });
+    } catch (err) {
+      if (err.messsage.includes('E11000')) {
+        throw new UnprocessableEntityException('Email already exists.');
+      }
+      throw err;
+    }
   }
 
   async findAll() {
@@ -40,7 +47,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({ email });
     const isValidPassword = await bcrypt.compare(passport, user.password);
 
-    if(!isValidPassword) {
+    if (!isValidPassword) {
       throw new UnauthorizedException('Credentials are not valid.');
     }
     return user;
