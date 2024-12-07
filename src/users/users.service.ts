@@ -13,7 +13,7 @@ export class UsersService {
         password: await bcrypt.hash(createUserInput.password, 10)
       });
     } catch (err) {
-      if (err.messsage.includes('E11000')) {
+      if (err.messsage?.indexOf("E11000") !== -1) {
         throw new UnprocessableEntityException('Email already exists.');
       }
       throw err;
