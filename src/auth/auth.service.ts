@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
   constructor(private readonly configService: ConfigService,
-              private readonly jwtService: JwtService
+    private readonly jwtService: JwtService
   ) { }
   async login(user: User, response: Response) {
     const expires = new Date();
@@ -27,5 +27,12 @@ export class AuthService {
       httpOnly: true,
       expires: expires
     });
+  }
+
+  logout(response: Response) {
+    response.cookie('Authentication', '', {
+      httpOnly: true,
+      expires: new Date()
+    })
   }
 }
