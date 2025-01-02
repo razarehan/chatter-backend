@@ -9,6 +9,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UsersModule } from './users/users.module';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
+import { ChatsModule } from './chats/chats.module';
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import { AuthModule } from './auth/auth.module';
       },
       inject: [ConfigService]
     }),
-    AuthModule
+    AuthModule,
+    ChatsModule
   ],
   controllers: [AppController],
   providers: [AppService],
