@@ -8,5 +8,5 @@ export class Chat extends AbstractEntity {
   name: string;
 
   @Field(() => Message, { nullable: true })
-  latestMessages?: Message;
+  latestMessage?: Message;
 }
