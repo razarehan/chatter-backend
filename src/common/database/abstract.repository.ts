@@ -5,7 +5,7 @@ import { AbstractEntity } from "./abstract.entity"
 export abstract class AbstractRepository<TDocument extends AbstractEntity> {
   protected abstract readonly logger: Logger;
 
-  constructor(protected readonly model: Model<TDocument>) { }
+  constructor(public readonly model: Model<TDocument>) { }
   async create(document: Omit<TDocument, '_id'>): Promise<TDocument> {
     const createDocument = new this.model({
       ...document,

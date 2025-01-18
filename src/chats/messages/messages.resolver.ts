@@ -15,7 +15,6 @@ import { MessageCreatedArgs } from './dto/message-created.args';
 export class MessagesResolver {
   constructor(
     private readonly messagesService: MessagesService,
-    @Inject(PUB_SUB) private readonly pubSub: PubSub
   ) { }
 
   @Mutation(() => Message)
@@ -23,7 +22,7 @@ export class MessagesResolver {
   async createMessage(
     @Args('createMessageInput') createMessageInput: CreateMessageInput,
     @CurrentUser() user: TokenPayload
-  ) {
+  ): Promise<Message> {
     return this.messagesService.createMessage(createMessageInput, user._id);
   }
 
@@ -32,23 +31,23 @@ export class MessagesResolver {
   async getMessages(
     @Args() getMessagesArgs: GetMessagesArgs,
     @CurrentUser() user: TokenPayload
-  ) {
-    return this.messagesService.getMessages(getMessagesArgs, user._id);
+  ): Promise<Message[]> {
+    return this.messagesService.getMessages(getMessagesArgs);
   }
 
   @Subscription(() => Message, {
     filter: (payload, variables, context) => {
       const userId = context.req.user._id;
+      const message: Message = payload.messageCreated
       return (
-        payload.messageCreated.chatId === variables.chatId &&
-        userId !== payload.messageCreated.userId
+        message.chatId === variables.chatId &&
+        userId !== message.user._id.toHexString()
       );
     }
   })
   messageCreated(
-    @Args() messageCreatedArgs: MessageCreatedArgs,
-    @CurrentUser() user: TokenPayload
+    @Args() messageCreatedArgs: MessageCreatedArgs
   ) {
-    return this.messagesService.messageCreated(messageCreatedArgs, user._id);
+    return this.messagesService.messageCreated(messageCreatedArgs);
   }
 }
