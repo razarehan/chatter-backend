@@ -20,7 +20,7 @@ export class ChatsService {
   async findMany(prePipelineStages: PipelineStage[] = []) {
     const chats = await this.chatsRepository.model.aggregate([
       ...prePipelineStages,
-      { $set: { latestMessage: { arrayElemAt: ['$Messages', -1] } } },
+      { $set: { latestMessage: { $arrayElemAt: ['$messages', -1] } } },
       { $unset: 'messages' },
       {
         $lookup: {
@@ -45,7 +45,7 @@ export class ChatsService {
 
   async findOne(_id: string) {
     const chats = await this.findMany([
-      { $match: { chatId: new Types.ObjectId(_id) } }
+      { $match: { _id: new Types.ObjectId(_id) } }
     ]);
     if (!chats[0]) {
       throw new NotFoundException(`No chat was found with id ${_id}`);
