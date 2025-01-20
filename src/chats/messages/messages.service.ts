@@ -52,7 +52,7 @@ export class MessagesService {
       { $match: { _id: new Types.ObjectId(chatId) } },
       { $unwind: '$messages' },
       { $replaceRoot: { newRoot: '$messages' } },
-      { $sort: { 'createdAt': -1 } },
+      { $sort: { createdAt: -1 } },
       { $skip: skip },
       { $limit: limit },
       {
@@ -77,7 +77,7 @@ export class MessagesService {
     return (
       await this.chatsRepository.model.aggregate([
         { $match: { _id: new Types.ObjectId(chatId) } },
-        { $unwind: 'messages' },
+        { $unwind: '$messages' },
         { $count: 'messages' }
       ])
     )[0];

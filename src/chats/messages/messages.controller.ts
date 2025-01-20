@@ -6,7 +6,7 @@ import { MessagesService } from './messages.service';
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) { }
 
-  @Get()
+  @Get('count')
   @UseGuards(JwtAuthGuard)
   async countMessages(@Query('chatId') chatId: string) {
     return this.messagesService.countMessages(chatId);
