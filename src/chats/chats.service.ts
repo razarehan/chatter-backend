@@ -71,7 +71,7 @@ export class ChatsService {
   }
 
   async countChats() {
-    this.chatsRepository.model.countDocuments();
+    return this.chatsRepository.model.countDocuments();
   }
   update(id: number, updateChatInput: UpdateChatInput) {
     return `This action updates a #${id} chat`;
