@@ -30,7 +30,6 @@ export class MessagesResolver {
   @UseGuards(GqlAuthGuard)
   async getMessages(
     @Args() getMessagesArgs: GetMessagesArgs,
-    @CurrentUser() user: TokenPayload
   ): Promise<Message[]> {
     return this.messagesService.getMessages(getMessagesArgs);
   }
