@@ -35,7 +35,7 @@ export class ChatsService {
           }
         }
       },
-      { $sort: { 'latestMessage.createdAt': -1 } },
+      { $sort: { 'latestMessage.createdAt': -1, _id: 1 } },
       { $skip: paginationArgs.skip },
       { $limit: paginationArgs.limit },
       { $unset: 'messages' },
