@@ -20,7 +20,7 @@ export class ChatsService {
 
   async findMany(
     prePipelineStages: PipelineStage[] = [],
-    paginationArgs?: PaginationArgs
+    paginationArgs: PaginationArgs = { skip: 0, limit: 10 }
   ) {
     const chats = await this.chatsRepository.model.aggregate([
       ...prePipelineStages,
