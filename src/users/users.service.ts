@@ -3,9 +3,14 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
+import { S3Service } from 'src/common/s3/s3.service';
+import { USER_IMAGE_FILE_EXTENSION, USERS_BUCKET } from './users.constants';
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) { }
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly s3Service: S3Service
+  ) { }
   async create(createUserInput: CreateUserInput) {
     try {
       return await this.usersRepository.create({
@@ -18,6 +23,14 @@ export class UsersService {
       }
       throw err;
     }
+  }
+
+  async uploadImage(file: Buffer, userId: string) {
+    return await this.s3Service.upload({
+      bucket: USERS_BUCKET,
+      key: `${userId}.jpg`,
+      file
+    });
   }
 
   async findAll() {
