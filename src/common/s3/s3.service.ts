@@ -11,8 +11,12 @@ export class S3Service {
     const accessKeyId = configService.get("AWS_ACCESS_KEY");
     const secretAccessKey = configService.get("AWS_SECRET_ACCESS_KEY");
 
-    const clientConfig: S3ClientConfig = {};
-
+    // const clientConfig: S3ClientConfig = {};
+    const clientConfig: S3ClientConfig = {
+      region: 'ap-south-1',
+      endpoint: `https://s3.ap-south-1.amazonaws.com`,
+      forcePathStyle: false,
+    };
     if (accessKeyId && secretAccessKey) {
       clientConfig.credentials = {
         accessKeyId,
@@ -34,6 +38,6 @@ export class S3Service {
   }
 
   getObjectUrl(bucket: string, key: string) {
-    return `https://${bucket}.s3.amazonaws.com/${key}`;
+    return `https://${bucket}.s3.ap-south-1.amazonaws.com/${key}`;
   }
 }
