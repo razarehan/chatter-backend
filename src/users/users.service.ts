@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException, UnprocessableEntityException } from 
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UsersRepository } from './users.repository';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { S3Service } from 'src/common/s3/s3.service';
 import { USER_IMAGE_FILE_EXTENSION, USERS_BUCKET } from './users.constants';
 import { UserDocument } from './entities/user.document';
